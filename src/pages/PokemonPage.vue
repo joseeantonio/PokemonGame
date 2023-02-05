@@ -1,4 +1,5 @@
 <template>
+  <h4>La puntuacion maxima alcanzada ha sido {{maxPuntuacion}}</h4>
   <h4>Puntuacion : {{puntuacion}}</h4>
   <h1>Te quedan {{tiempo}} segundos</h1>
   <h1 v-if="!pokemon">Cargando</h1>
@@ -8,7 +9,7 @@
     <h2 class="nombrePokemon" v-else>El nombre del pokemon es {{pokemon.name}}</h2>
     <template v-if="showPokemon">
       <h3>{{message}}</h3>
-      <button class="btn btn-outline-primary" @click="newGame">Volver a jugar</button>
+      <button class="btn btn-outline-primary" @click="newGame">{{this.msjboton}}</button>
     </template>
   </div>
 </template>
@@ -31,6 +32,8 @@
         contador:0,
         tiempo:10,
         opciones:true,
+        maxPuntuacion:0,
+        msjboton:''
       }
     },methods: {
       async mixedpokemons() {
@@ -42,17 +45,20 @@
       },checkPokemon(pokemonId){
         this.showPokemon = true
         this.opciones=false
-
+        if (this.puntuacion>this.maxPuntuacion){this.maxPuntuacion = this.puntuacion}
         if (pokemonId===false){
           this.puntuacion = 0
           this.message = 'Se mas rapido la proxima vez'
+          this.msjboton = 'Volver a jugar'
         }else {
           if (pokemonId === this.pokemon.id) {
             this.puntuacion +=1
             this.message = 'Has acertado'
+            this.msjboton = 'Siguiente ronda'
           }else {
             this.puntuacion = 0
             this.message = 'No has acertado'
+            this.msjboton = 'Volver a jugar'
           }
         }
       },
